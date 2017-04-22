@@ -126,7 +126,5 @@ unsigned long long virtualMemoryManagerInterface::memoryAccess(unsigned long lon
 int main() 
 {
 
-
-
 	return 0;
 }
