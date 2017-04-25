@@ -23,12 +23,14 @@ unsigned long long virtualMemoryManagerInterface::memoryAccess(unsigned long lon
 	unsigned int framesAmount = virtualMemoryManagerInterface::numFrames; // num of frames
 	unsigned int n = virtualMemoryManagerInterface::N; // N = page address bit size... 2^ N = The physical frame / virtual page size to manage(bytes) 
 	unsigned int virt = virtualMemoryManagerInterface::virtualAddressSpaceSize; // 2^virtualAddressSpaceSize = total virtual address space(bytes)
-	int space = pow(2, virt)/n; // max amount of frames that can be stored
+	int space = framesAmount; // max amount of frames that can be stored
+	//int v_space = pow(2, virt);
 	int remaining = space;
 	int * pos; // used in FIFO
 	pos = new int[space];
 	int * recent; // used in LRU
 	unsigned long long * taken;
+	//int p_space = framesAmount *pow(2, n); // the total size of the physical memory space
 	taken = new unsigned long long[space];
 	recent = new int[space]; // set the size to the max number of elements that can be used for this
 	// first need to set up way to keep track what is in the memory
@@ -48,7 +50,7 @@ unsigned long long virtualMemoryManagerInterface::memoryAccess(unsigned long lon
 			return x;
 		
 		}
-		else {
+		else { // will need to update this to be the mapping between vm and pm... rn have virtual memory lru and such will need to convert to physical memory and such
 			if (remaining == 0)
 			{//need to swap
 				// need to get the lru
@@ -67,14 +69,14 @@ unsigned long long virtualMemoryManagerInterface::memoryAccess(unsigned long lon
 				taken[spos] = mem;
 				recent[spos] = counter;
 				swap(mem, mem);
-				return taken[spos];
+				return spos;
 			}
 			else
 			{//dont need to swap but remaining must decrement by one
 				taken[space - remaining] = mem;
 				recent[space - remaining] = counter;
 				remaining -= 1;
-				return taken[space - remaining + 1];
+				return space - remaining + 1;
 
 			}
 		}
@@ -91,7 +93,7 @@ unsigned long long virtualMemoryManagerInterface::memoryAccess(unsigned long lon
 		}
 		if (found)
 		{// dont need to update pos since its only updated when it is inserted
-			return taken[x];
+			return x;
 		}
 		else {
 			if (remaining == 0)
@@ -104,14 +106,14 @@ unsigned long long virtualMemoryManagerInterface::memoryAccess(unsigned long lon
 				taken[min - 1] = mem;
 				pos[min - 1] = counter;
 				swap(mem,mem);
-				return taken[min - 1];
+				return min-1;
 			}
 			else
 			{//dont need to swap but remaining must decrement by one
 				taken[space - remaining] = mem;
 				pos[space - remaining] = counter;
 				remaining -= 1;
-				return taken[space - remaining + 1];
+				return space - remaining + 1;
 			}
 		}
 	}
@@ -125,6 +127,10 @@ unsigned long long virtualMemoryManagerInterface::memoryAccess(unsigned long lon
 
 int main() 
 {
+
+	// as of now am returning the virtual memory address need to return the phyiscal memory address\
+	// lru and fifo are good so far
+
 
 	return 0;
 }
