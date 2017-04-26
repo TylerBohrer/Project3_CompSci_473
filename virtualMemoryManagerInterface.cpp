@@ -17,7 +17,7 @@ void virtualMemoryManagerInterface::swap(unsigned int frameNumber, unsigned int 
 
 }
 unsigned long long virtualMemoryManagerInterface::memoryAccess(unsigned long long mem)
-{
+{ // basically we need to implement what I did in here in a seperate function or keep it here if it works
 	counter += 1;
 	ReplacementPolicy type = virtualMemoryManagerInterface::policy; // policy
 	unsigned int framesAmount = virtualMemoryManagerInterface::numFrames; // num of frames
