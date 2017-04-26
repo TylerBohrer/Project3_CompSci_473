@@ -28,25 +28,26 @@ class memoryManager : public virtualMemoryManagerInterface {
 
 };
 int remaining = 0;
+	
+int v_space = pow(2, virt);
+	//static int remaining = space;
+int * pos; // used in FIFO
+static int * recent; // used in LRU
+unsigned long long * taken;//int p_space = framesAmount *pow(2, n); // the total size of the physical memory space
+pos = new int[space];
+taken = new unsigned long long[space]; // this needs to change it is making a new one every run
+recent = new int[space]; // set the size to the max number of elements that can be used for this
 unsigned long long memoryManager::worker(unsigned long long mem)
 {
 	counter += 1;
 	int space = framesAmount; // max amount of frames that can be stored
-	int v_space = pow(2, virt);
-	//static int remaining = space;
-	int * pos; // used in FIFO
-	static int * recent; // used in LRU
-	unsigned long long * taken;//int p_space = framesAmount *pow(2, n); // the total size of the physical memory space
-	pos = new int[space];
-	taken = new unsigned long long[space];
-	recent = new int[space]; // set the size to the max number of elements that can be used for this
 	if (type == LRU) {
 		//check if it is init
 		bool found = false;
 		int x = 0;
-		for (x = 0; x < space - remaining; x++)
+		for (x = 0; x < space; x++)
 		{
-			if (taken[x] == mem) { break; }
+			if (taken[x] == mem) { found = true; break; }
 		}
 		if (found)
 		{
@@ -91,9 +92,10 @@ unsigned long long memoryManager::worker(unsigned long long mem)
 		//check if it is init
 		bool found = false;
 		int x = 0;
-		for (x = 0; x < space - remaining; x++)
+		for (x = 0; x < space; x++)
 		{
-			if (taken[x] == mem) { break; }
+			cout << taken[x] << " : " << mem << endl;
+			if (taken[x] == mem) { found = true; break; }
 		}
 		if (found)
 		{// dont need to update pos since its only updated when it is inserted
@@ -257,6 +259,7 @@ int main()
 	cout << memManager->memoryAccess(help3) << endl;
 	cout << memManager->memoryAccess(help4) << endl;
 	cout << memManager->memoryAccess(help5) << endl;
+	cout << memManager->memoryAccess(help6) << endl;
 	cout << memManager->memoryAccess(help6) << endl;
 	cout << memManager->numberPageSwaps() << endl;
 
