@@ -75,6 +75,7 @@ unsigned long long memoryManager::memoryAccess(unsigned long long mem) {
 			if (currentFifoFrame == numFrames) {
 				currentFifoFrame = 0; // min has done a full recycle so must be reset now
 			}
+			cout << "heyyy" << endl;
 			physicalFrames[currentFifoFrame] = virtualPages[pageNumber];
 			pos[currentFifoFrame] = counter;
 			swap(currentFifoFrame, pageNumber);
@@ -98,14 +99,16 @@ unsigned long long memoryManager::memoryAccess(unsigned long long mem) {
 
 int main() {
 	// just a sample object to make sure things are being constructed alright
-	virtualMemoryManagerInterface * memManager = new memoryManager(FIFO, 8, 5, 16);
+	virtualMemoryManagerInterface * memManager = new memoryManager(LRU, 8, 5, 16);
+	// physical mem: 0 to 1280
 
 	unsigned long long help1 = 10;
-	unsigned long long help2 = 110;
-	unsigned long long help3 = 1110;
-	unsigned long long help4 = 11110;
-	unsigned long long help5 = 111110;
-	unsigned long long help6 = 111;
+	unsigned long long help2 = 256;
+	unsigned long long help3 = 514;
+	unsigned long long help4 = 769;
+	unsigned long long help5 = 1024;
+	unsigned long long help6 = 11;
+	unsigned long long help7 = 1300;
 
 	cout << memManager->memoryAccess(help1) << endl;
 	cout << memManager->memoryAccess(help2) << endl;
@@ -113,6 +116,7 @@ int main() {
 	cout << memManager->memoryAccess(help4) << endl;
 	cout << memManager->memoryAccess(help5) << endl;
 	cout << memManager->memoryAccess(help6) << endl;
+	cout << memManager->memoryAccess(help7) << endl;
 
 	cout << "PageSwaps: ";
 	cout << memManager->numberPageSwaps() << endl;
