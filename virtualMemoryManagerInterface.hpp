@@ -3,7 +3,7 @@
 #include <iostream> 
 #include <cassert> 
 #include <cmath>
-using namespace std;
+//using namespace std;
 enum ReplacementPolicy {
 	FIFO, LRU
 };
@@ -19,7 +19,7 @@ public:
 	  * address. This function must NOT return until any page swapping is completed, if necessary.
 	  * This function is to effect page swaps by calling the other key function (defined below)
 	  */ 
-	virtual unsigned long long memoryAccess(unsigned long long address) = 0;
+	virtual unsigned long long memoryAccess(unsigned long long address)=0;
 	  /** This is the method your memory manager should call to swap pages. 
 	  * This function has been instrumented by the TAs to report memory system performance.
 	  * @param frameNumber the physical frame to write to swap file (write is emulated)

@@ -114,7 +114,10 @@ int main() {
 	virtualMemoryManagerInterface * memManager = new VirtualMemoryManager(FIFO, 8, 5, 16);
 
 	delete memManager;
-
+	int test = 0;
+	cout << "this is some words" << endl;
+	cout << test << endl;
+	cin >> test;
 	return 0;
 }
 
