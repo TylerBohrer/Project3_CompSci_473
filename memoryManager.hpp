@@ -32,8 +32,8 @@ public:
 		physicalFrames = new Page[numFrames];
 		virtualPages = new Page[numPages];
 		for (unsigned int i = 0; i < numPages; i++) {
-			virtualPages[i].startAddr = i * virtualAddressSpaceSize;
-			virtualPages[i].endAddr = (i + 1) * virtualAddressSpaceSize - 1;
+			virtualPages[i].startAddr = i * pageSize;
+			virtualPages[i].endAddr = (i + 1) * pageSize - 1;
 		}
 		
 		freeFrames = numFrames;

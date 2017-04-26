@@ -9,14 +9,14 @@ unsigned long long memoryManager::memoryAccess(unsigned long long mem) {
 	counter++;
 
 	// find the page corresponding to logical address mem
-	unsigned int pageNumber = numPages;
+	unsigned int pageNumber = numPages + 1;
 	for (unsigned int i = 0; i < numPages; i++) {
 		if (mem <= virtualPages[i].endAddr) {
 			pageNumber = i;
 			break; // breaks when logical address mem is within page's range
 		}
 	}
-	if (pageNumber == numPages) { // no page contains this address
+	if (pageNumber == numPages + 1) { // no page contains this address
 		cout << "Invalid logical memory address\n";
 		return -1;
 	}
@@ -33,7 +33,7 @@ unsigned long long memoryManager::memoryAccess(unsigned long long mem) {
 		for (unsigned int frameNumber = 0; frameNumber < numFrames - freeFrames; frameNumber++) {
 			if (physicalFrames[frameNumber].startAddr <= mem && mem <= physicalFrames[frameNumber].endAddr) { // found
 				recent[frameNumber] = counter;
-				return physicalFrames[frameNumber].startAddr + memOffsetFromPageStart;
+				return frameNumber * pageSize + memOffsetFromPageStart;
 			}
 		}
 		// not found in physical memory
@@ -51,14 +51,14 @@ unsigned long long memoryManager::memoryAccess(unsigned long long mem) {
 			physicalFrames[lruFrameNumber] = virtualPages[pageNumber];
 			recent[lruFrameNumber] = counter;
 			swap(lruFrameNumber, pageNumber);
-			return physicalFrames[lruFrameNumber].startAddr + memOffsetFromPageStart;
+			return lruFrameNumber * pageSize + memOffsetFromPageStart;
 		}
 
 		// dont need to swap but remaining must decrement by one
 		physicalFrames[numFrames - freeFrames] = virtualPages[pageNumber];
 		recent[numFrames - freeFrames] = counter;
 		freeFrames--;
-		return physicalFrames[numFrames - (freeFrames + 1)].startAddr + memOffsetFromPageStart;
+		return (numFrames - (freeFrames + 1)) * pageSize + memOffsetFromPageStart;
 
 	}
 	else if (policy == FIFO) {
@@ -66,7 +66,7 @@ unsigned long long memoryManager::memoryAccess(unsigned long long mem) {
 		for (unsigned int frameNumber = 0; frameNumber < numFrames - freeFrames; frameNumber++) {
 			if (physicalFrames[frameNumber].startAddr <= mem && mem <= physicalFrames[frameNumber].endAddr) { // found
 				// dont need to update pos since its only updated when it is inserted
-				return physicalFrames[frameNumber].startAddr + memOffsetFromPageStart;
+				return frameNumber * pageSize + memOffsetFromPageStart;
 			}
 		}
 
@@ -79,14 +79,14 @@ unsigned long long memoryManager::memoryAccess(unsigned long long mem) {
 			pos[currentFifoFrame] = counter;
 			swap(currentFifoFrame, pageNumber);
 			currentFifoFrame++;
-			return physicalFrames[currentFifoFrame - 1].startAddr + memOffsetFromPageStart;
+			return (currentFifoFrame - 1) * pageSize + memOffsetFromPageStart;
 		}
 
 		// dont need to swap but remaining must decrement by one
 		physicalFrames[numFrames - freeFrames] = virtualPages[pageNumber];
 		pos[numFrames - freeFrames] = counter;
 		freeFrames--;
-		return physicalFrames[numFrames - (freeFrames + 1)].startAddr + memOffsetFromPageStart;
+		return (numFrames - (freeFrames + 1)) * pageSize + memOffsetFromPageStart;
 	}
 	else {
 		cout << "Invalid Policy\n";
@@ -100,7 +100,26 @@ int main() {
 	// just a sample object to make sure things are being constructed alright
 	virtualMemoryManagerInterface * memManager = new memoryManager(FIFO, 8, 5, 16);
 
+	unsigned long long help1 = 10;
+	unsigned long long help2 = 110;
+	unsigned long long help3 = 1110;
+	unsigned long long help4 = 11110;
+	unsigned long long help5 = 111110;
+	unsigned long long help6 = 111;
+
+	cout << memManager->memoryAccess(help1) << endl;
+	cout << memManager->memoryAccess(help2) << endl;
+	cout << memManager->memoryAccess(help3) << endl;
+	cout << memManager->memoryAccess(help4) << endl;
+	cout << memManager->memoryAccess(help5) << endl;
+	cout << memManager->memoryAccess(help6) << endl;
+
+	cout << "PageSwaps: ";
+	cout << memManager->numberPageSwaps() << endl;
+
 	delete memManager;
+
+	system("pause");
 
 	return 0;
 }
