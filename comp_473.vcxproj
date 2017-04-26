@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="memoryManager.hpp" />
     <ClInclude Include="virtualMemoryManagerInterface.hpp" />
   </ItemGroup>
   <ItemGroup>

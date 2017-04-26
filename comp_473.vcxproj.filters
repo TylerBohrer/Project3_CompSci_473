@@ -18,6 +18,9 @@
     <ClInclude Include="virtualMemoryManagerInterface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="memoryManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="virtualMemoryManagerInterface.cpp">
