@@ -1,11 +1,11 @@
-#include "VirtualMemoryManager.hpp"
+#include "memoryManager.hpp"
 using namespace std;
 // need to get the info for mem
 
 int min = 0;
 int counter = -1;
 
-unsigned long long VirtualMemoryManager::memoryAccess(unsigned long long mem) {
+unsigned long long memoryManager::memoryAccess(unsigned long long mem) {
 	counter++;
 
 	int space = numFrames; // max amount of frames that can be stored
@@ -111,7 +111,7 @@ int main() {
 	// lru and fifo are good so far
 
 	// just a sample object to make sure things are being constructed alright
-	virtualMemoryManagerInterface * memManager = new VirtualMemoryManager(FIFO, 8, 5, 16);
+	virtualMemoryManagerInterface * memManager = new memoryManager(FIFO, 8, 5, 16);
 
 	delete memManager;
 
